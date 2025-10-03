@@ -1,0 +1,364 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: black;
+}
+
+.weather-app-main{
+    max-width: 1410px;
+    width: 100%;
+    height: 994px;
+    display: flex;
+    gap: 20px;
+    margin: 0 auto;
+    background-color: #191B1F;
+    padding: 15px;
+}
+.box{
+
+    background: linear-gradient(168.42deg, rgba(255, 255, 255, 0.1) 11.67%, rgba(153, 153, 153, 0.1) 80.37%);
+    border-radius: 28px;
+    padding: 40px 47px;
+}
+.left-section{
+    width: 452px;
+}
+.right-section{
+    flex: 1;
+}          
+.search-box-main{
+    text-align: center;
+    position: relative;
+}
+.search{
+    width: 341px;
+    height: 54px;
+    border-radius: 25px;
+    border: none;
+    background: #C2D4D3;;
+    padding: 10px 80px;
+    color: rgba(126, 124, 124, 1);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 36px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+   
+}
+.search-contents{
+    position: absolute;
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    top: 18px;
+    left: 50px;
+}
+.search-contents img{
+    height: 20px;
+    width: 20px;
+}
+
+.weather-main-info{
+    display: flex;
+    flex-direction: column;
+    gap: 49px;
+    align-items: center;
+}
+.weather-main-info img{
+    width: 316px;
+}
+.weather-main-info div{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+    margin-top: 30px;
+}
+.weather-main-info div::after{
+    content: " ";
+    position: absolute;
+    bottom: -25px;
+    width: 100%;
+    height: 2px;
+    background-color: #C2D4D3;
+}
+.weather-main-info div span{
+    font-weight: 400;
+    font-size: 25px;
+    color: #FFFFFF;
+    font-family: "Plus Jakarta Sans";
+}
+.weather-degree {
+    font-weight: 700;
+    font-size: 96px;
+    line-height: 36px;
+    font-family: "Plus Jakarta Sans";
+    color: #FFFFFF;
+}
+
+
+.minor-info{
+    width: 358px;
+    height: 108px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px;
+}
+.minor-info p{
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 36px;
+    font-family: "Plus Jakarta Sans";
+    color: #FFFFFF;
+}
+.minor-info div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.minor-info img{
+    width: 24px;
+    height: 24px;
+}
+
+.add-info{
+    display: flex;
+    width: 341px;
+    height: 78px;
+    justify-content: space-between;
+    padding: 15px;
+    background: #252222A6;
+    border-radius: 12px;
+    border: none;
+    margin-top: 80px;
+}
+.add-info div{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.add-info div div{
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+.add-info-details-one{
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 100%;
+    font-family: "Plus Jakarta Sans";
+    color: #FFFFFF;
+}
+.add-info-details-two{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 100%;
+    font-family: "Plus Jakarta Sans";
+    color: #FFFFFF;
+}
+.add-info img{
+    width: 47px;
+    height: 47px;
+}
+
+
+.day-toggle{
+    display: flex;
+    gap: 26px;
+    width: 164px;
+    height: 40px;
+    
+}
+.toggle{
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 100%;
+    font-family: "Plus Jakarta Sans";
+}
+.days{
+    color: #FFFFFF80;
+}
+.weeks{
+    color: #FFFFFF;
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-color: white;
+    text-underline-offset: 30%;
+    text-decoration-thickness: 15%
+}
+.climate-cards{
+    display: flex;
+    gap: 15px;
+    padding: 15px 0;
+    margin-top: 35px;
+}
+.climate-card{
+     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 106px;
+    height: 176px;
+    background: #252222A6;
+    border-radius: 12px;
+    gap: 5px;
+}
+.climate-card img{
+    width: 70px;
+    height: 70px;
+}
+.climate-card span{
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 100%;
+    font-family: "Plus Jakarta Sans";
+    color: #FFFFFF;
+}
+
+
+.overview-heading{
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 100%;
+    font-family: "Plus Jakarta Sans";
+    color: #FFFFFF;
+    margin: 50px 0 40px;
+
+}
+.top-overview{
+    display: flex;
+    gap: 20px;
+}
+.top-overview-box{
+    width: 268px;
+    height: 221px;
+    background: #252222A6;
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+
+}
+.top-overview-box h3{
+    font-size: 17px;
+    line-height: 36px;
+    font-weight: 500;
+    font-family: "Plus Jakarta Sans";
+    color: #FFFFFF;
+}
+.top-overview-rating-main{
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    align-items: center;
+}
+.top-overview img{
+    width: 70px;
+    height: 70px;
+}
+.top-overview-rating-value{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.top-overview-rating-value h1{
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 100%;
+    font-family: "Plus Jakarta Sans";
+    color: #FFFFFF;
+}
+.top-overview-rating-value p{
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 36px;
+    font-family: "Plus Jakarta Sans";
+}
+.top-overview-img-main{
+    height: 100%;
+    display: flex;
+    align-items: end;
+}
+
+.air-quality .top-overview-rating-value p{
+    color: #009968;
+}
+.uv-index .top-overview-rating-value p{
+    color: #F5CD2F;
+}
+.pressure .top-overview-rating-value p{
+    color: #FFFFFF;
+}
+
+
+.bottom-overview{
+    display: flex;
+    gap: 20px;
+    margin-top: 60px;
+
+}
+.precipitation{
+    width: 556px;
+    height: 221px;
+    background-color: #252222A6;
+    border-radius: 12px;
+    padding: 15px 20px;
+}
+.sunrise-sunset{
+    flex: 1;
+    height: 221px;
+    background-color: #252222A6;
+    border-radius: 12px;
+    padding: 15px 20px;
+}
+.precipitation h4{
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 36px;
+    font-family: "Plus Jakarta Sans";
+    color: #FFFFFF;
+}
+.sunrise-sunset h4{
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 36px;
+    font-family: "Plus Jakarta Sans";
+    color: #FFFFFF;
+}
+.sunrise-sunset-main{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.sunrise-sunset-main img{
+    width: 44px;
+    height: 40px;
+}
+
+.sunrise, .sunset{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.sunrise div, .sunset div{
+    display: flex;
+    flex-direction: column;
+}
+
+.sunrise-sunset-main p{
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: 500;
+    color: #6A6969;
+    font-family: "Plus Jakarta Sans";
+}
+.sunrise-sunset-main span{
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 36px;
+    font-family: "Plus Jakarta Sans";
+    color: #FFFFFF;
+}

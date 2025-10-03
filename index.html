@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <title>Weather App</title>
+</head>
+<body>
+    <section class="main-section">
+
+        <div class="weather-app-main">
+            <div class="left-section box">
+                <div class="search-box-main">
+                    <input type="search" class="search" id="search-box" placeholder="Search city...">
+                    <div class="search-contents">
+                        <img src="images/Icon.svg" alt="" id="searchIcon">
+                    </div>
+                </div>
+                <div class="weather-main-info">
+                        <img src="images/f1036de3b82347c3bc8e8c1d8f809d9510814f27 (1).png" class="weather-img" alt="">
+                        <h1 class="weather-degree" id="mainTemperature">30°c</h1>
+                        <div>
+                            <span id="cityName">Kuala Lampur</span>
+                            <span>Monday</span>
+                        </div>
+                </div>
+                <div class="minor-info">
+                    <div>
+                        <img src="images/Cloud Rain.png" alt="">
+                        <p>Light Rain</p>
+                    </div>
+                    <div>
+                        <img src="images/Temperature 01.png" alt="">
+                        <p id="minTemp">Min Temperature-28°C</p>
+                    </div>
+                    <div>
+                        <img src="images/Temperature 02.png" alt="">
+                        <p id="maxTemp">Max Temperature-31°C</p>
+                    </div>
+                </div>
+                <div class="add-info">
+                    <div>
+                        <img src="images/water.png" alt="">
+                        <div>
+                            <span class="add-info-details-one" id="humidity">83%</span>
+                            <span class="add-info-details-two">Humidity</span>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="images/wind.png" alt="">
+                        <div> 
+                            <span class="add-info-details-one" id="windSpeed">6km/h</span>
+                            <span class="add-info-details-two">Wind Speed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="right-section box">
+                <div class="day-toggle">
+                    <h3 class="days toggle">Today</h3>
+                    <h3 class="weeks toggle">Week</h3>
+                </div>
+
+
+                <div class="climate-cards">
+                    <div class="climate-card">
+                        <span>Sun</span>
+                        <img src="images/daily-climate1.png" alt="">
+                        <span>32°</span>
+                    </div>
+                    <div class="climate-card">
+                        <span>Sun</span>
+                        <img src="images/daily-climate1.png" alt="">
+                        <span>32°</span>
+                    </div>
+                    <div class="climate-card">
+                        <span>Sun</span>
+                        <img src="images/daily-climate1.png" alt="">
+                        <span>32°</span>
+                    </div>
+                    <div class="climate-card">
+                        <span>Sun</span>
+                        <img src="images/daily-climate1.png" alt="">
+                        <span>32°</span>
+                    </div>
+                    <div class="climate-card">
+                        <span>Sun</span>
+                        <img src="images/daily-climate1.png" alt="">
+                        <span>32°</span>
+                    </div>
+                    <div class="climate-card">
+                        <span>Sun</span>
+                        <img src="images/daily-climate1.png" alt="">
+                        <span>32°</span>
+                    </div>
+                    <div class="climate-card">
+                        <span>Sun</span>
+                        <img src="images/daily-climate1.png" alt="">
+                        <span>32°</span>
+                    </div>
+                </div>
+
+                <h2 class="overview-heading">Today's Overview</h2>
+
+                <div class="top-overview">
+                    <div class="air-quality top-overview-box">
+                        <h3>Air Quality Index</h3>
+                        <div class="top-overview-rating-main">
+                            <div class="top-overview-rating-value">
+                                <h1>53</h1>
+                                <p>Good</p>
+                            </div>
+                            <div class="top-overview-img-main">
+                                <img src="images/airpolution.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uv-index top-overview-box">
+                        <h3>UV Index</h3>
+                        <div class="top-overview-rating-main">
+                            <div  class="top-overview-rating-value">
+                                <h1>3</h1>
+                                <p>Moderate</p>
+                            </div>
+                            <div class="top-overview-img-main">
+                                <img src="images/uv.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pressure top-overview-box">
+                        <h3>Pressure(hpa)</h3>
+                        <div class="top-overview-rating-main">
+                            <div  class="top-overview-rating-value">
+                                <h1>1006</h1>
+                                <p>Normal</p>
+                            </div>
+                            <div class="top-overview-img-main">
+                                <img src="images/barometer.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bottom-overview">
+                    <div class="precipitation">
+                        <h4>Precipitation</h4>
+                        <div></div>
+                    </div>
+                    <div class="sunrise-sunset">
+                        <h4>Sunrise & Sunset</h4>
+                        <div class="sunrise-sunset-main">
+                            <div class="sunrise">
+                                <img src="images/sunrise.png" alt="">
+                                <div>
+                                    <p>Sunrise</p>
+                                    <span>7:06 AM</span>
+                                </div>
+                            </div>
+                            <div class="sunset">
+                                <img src="images/sunset.png" alt="">
+                                <div>
+                                    <p>Sunset</p>
+                                    <span>7:03 PM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>                       
+    <script src="script.js"></script>
+</body>
+</html>
