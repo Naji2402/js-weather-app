@@ -7,11 +7,7 @@ let minimumTemperature = document.querySelector('#minTemp');
 let maximumTemperature = document.querySelector('#maxTemp');
 let humidity = document.querySelector('#humidity');
 let windSpeed = document.querySelector('#windSpeed');
-
-
-
-
-
+let data;
 
 searchIcon.addEventListener('click', () => {
     city = search.value;
@@ -22,46 +18,59 @@ searchIcon.addEventListener('click', () => {
         try {
             const weatherApi = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=a684b0b2ebb1b924e595991906953652`;
             const weatherDetails = await fetch(weatherApi);
-            const data = await weatherDetails.json();
-            const temperature = data.main.temp;
-            console.log(data);
-            const celsiusValue = temperature - 273.15;
-            const celsius = celsiusValue.toFixed(0);
-            const celsiusResult = `${celsius}°c`
-            mainTemperature.textContent = celsiusResult;
-            const currentCityName = data.name;
-            cityName.textContent = currentCityName;
-            const minTemperatureValue = data.main.temp_min;
-            const maxTemperatureValue = data.main.temp_max;
-            const minTemperature = minTemperatureValue - 273.15;
-            const maxTemperature = maxTemperatureValue - 273.15;
-            minimumTemperature.textContent = `Min Temperature-${minTemperature.toFixed(0)}°C`;
-            maximumTemperature.textContent = `Max Temperature-${maxTemperature.toFixed(0)}°C`;
-            const humidityValue = data.main.humidity;
-            humidity.textContent = `${humidityValue}%`;
-            const windSpeedValue = data.wind.speed;
-            windSpeed.textContent = `${windSpeedValue.toFixed(1)}km/h`;
-            sunriseConvert();
-
+            data = await weatherDetails.json();
+            mainTemp();
+            getCityName();
+            minMaxTemp();
+            getHumidity();
+            getWindSpeed();
+            // sunriseConvert(data);
+            console.log(data); 
         }
         catch(error) {
             console.log("error! cannot fetch data");
         }
-    
 }
 getWeatherDetails();
 }
 });
 
 
+function mainTemp() {
+    const temperature = data.main.temp;
+    const celsiusValue = temperature - 273.15;
+    const celsius = celsiusValue.toFixed(0);
+    const celsiusResult = `${celsius}°c`
+    mainTemperature.textContent = celsiusResult;
+}
+
+function getCityName() {
+    const currentCityName = data.name;
+    cityName.textContent = currentCityName;
+}
+
+function minMaxTemp() {
+    const minTemperatureValue = data.main.temp_min;
+    const maxTemperatureValue = data.main.temp_max;
+    const minTemperature = minTemperatureValue - 273.15;
+    const maxTemperature = maxTemperatureValue - 273.15;
+    minimumTemperature.textContent = `Min Temperature-${minTemperature.toFixed(0)}°C`;
+    maximumTemperature.textContent = `Max Temperature-${maxTemperature.toFixed(0)}°C`;
+}
+
+function getHumidity() {
+    const humidityValue = data.main.humidity;
+    humidity.textContent = `${humidityValue}%`;
+}
+
+function getWindSpeed() {
+    const windSpeedValue = data.wind.speed;
+    windSpeed.textContent = `${windSpeedValue.toFixed(1)}km/h`;
+}
+
 function sunriseConvert() {
     const sunRiseTime = data.sys.sunrise;
     console.log(sunRiseTime);
 }
 
-                 
 
-                                                    
-                           
-
-                                                          
