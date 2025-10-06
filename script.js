@@ -12,6 +12,8 @@ let city;
 let dayToday = document.querySelector('#dayToday');
 let pressureValue = document.querySelector('#pressureValue');
 let pressureValueDescription = document.querySelector('#pressureValueDescription');
+let airQualityValue = document.querySelector('#airQualityValue');
+let airQualityIndex = document.querySelector('#airQualityIndex');
 
 searchIcon.addEventListener('click', () => {
     city = search.value;
@@ -33,13 +35,49 @@ searchIcon.addEventListener('click', () => {
             sunriseConvert(data);
             sunsetConvert(data);
             pressureDetails(data);
-            console.log(data); 
             }
         catch(error) {
             console.log("error! cannot fetch data");
         }
         
 }
+        async function getAirQuality() {
+            try {
+                const airQuality = await fetch(`https://api.api-ninjas.com/v1/airquality?city=${city}`, {
+                headers: {
+                    "X-Api-key": "kktnmB0/suy2hXK/xLL1kw==mNRG44pm82wOqnPs"
+                }
+            })
+                const data = await airQuality.json();
+                const airQualValue = data.overall_aqi;
+                airQualityValue.textContent = airQualValue;
+                let airQualityResult;
+                switch(true) {
+                    case airQualValue > 400:
+                        airQualityResult = "Severe";
+                        break;
+                    case airQualValue >= 300:
+                        airQualityResult = "Very Poor";
+                        break;
+                    case airQualValue >= 200:
+                        airQualityResult = "Poor";
+                        break;
+                    case airQualValue >= 100:
+                        airQualityResult = "Moderate";
+                        break;
+                    case airQualValue >= 50:
+                        airQualityResult = "Satisfactory";
+                        break;
+                    default:
+                        airQualityResult = "Good"
+                }
+                airQualityIndex.textContent = airQualityResult;
+            } catch (error) {
+                console.log(error);
+            }
+            
+        }
+getAirQuality()
 getWeatherDetails();
 }
 });
@@ -77,7 +115,6 @@ function getWindSpeed(data) {
 }
 
 function sunRiseSetConvert(sunSetTime) {
-    // const riseSetTime = data.sys.riseSet;
     const date = new Date(sunSetTime * 1000);
     const hours = date.getHours();
     let amPm;
@@ -141,3 +178,8 @@ function pressureDetails(data) {
     }
     pressureValueDescription.textContent = pressureValueWarning;
 }
+
+
+                                               
+
+       
