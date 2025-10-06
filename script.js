@@ -14,6 +14,22 @@ let pressureValue = document.querySelector('#pressureValue');
 let pressureValueDescription = document.querySelector('#pressureValueDescription');
 let airQualityValue = document.querySelector('#airQualityValue');
 let airQualityIndex = document.querySelector('#airQualityIndex');
+let climate = document.querySelector('#climate');
+let weatherImage = document.querySelector('#mainWeatherImage');
+let images = {
+    lightRainDay: "images/lightrain(day).png",
+    lightRainNight: "images/lightrainNight.png",
+    heavyRain: "images/heavyRain.png",
+    windyDay: "images/windy(day).png",
+    windyNight: "images/windy(night).png",
+    thunderStorm: "images/Thunderstorm.png",
+    clearDay: "images/Clear(Day).png",
+    clearNight: "images/clear(Night).png",
+    cloudy: "images/cloudy.png",
+    windyCloud: "images/windycloud.png"
+}
+
+
 
 searchIcon.addEventListener('click', () => {
     city = search.value;
@@ -28,14 +44,16 @@ searchIcon.addEventListener('click', () => {
             const data = await weatherDetails.json();
             mainTemp(data);
             getCityName(data);
-            // getCurrentDay();
+            getClimate(data);
+            getCurrentDay();
             minMaxTemp(data);
             getHumidity(data);
             getWindSpeed(data);
             sunriseConvert(data);
             sunsetConvert(data);
-            pressureDetails(data);
-            }
+            pressureDetails(data);   
+            console.log(data);
+        }
         catch(error) {
             console.log("error! cannot fetch data");
         }
@@ -58,6 +76,7 @@ searchIcon.addEventListener('click', () => {
                         break;
                     case airQualValue >= 300:
                         airQualityResult = "Very Poor";
+
                         break;
                     case airQualValue >= 200:
                         airQualityResult = "Poor";
@@ -89,10 +108,39 @@ function mainTemp(data) {
     const celsiusResult = `${celsius}°c`
     mainTemperature.textContent = celsiusResult;
 }
-
 function getCityName(data) {
     const currentCityName = data.name;
     cityName.textContent = currentCityName;
+}
+
+function getClimate(data) {
+    const climateValue = data.weather[0].description;
+    climate.textContent = climateValue;
+    switch(climateValue){
+        case "scattered clouds":
+            weatherImage.src = images.cloudy;
+            break;
+        case "overcast clouds":
+            weatherImage.src = images.windyCloud;
+            break;
+        case "light rain":
+            weatherImage.src = images.lightRainDay;
+            break;
+        case "heavy rain":
+            weatherImage.src = images.thunderStorm;
+            break;
+        case "moderate rain": 
+            weatherImage.src = images.heavyRain;
+            break;
+        case "broken clouds":
+            weatherImage.src = images.cloudy;
+            break;
+        case "heavy intensity rain":
+            weatherImage.src = images.thunderStorm;
+            break;
+        default:
+            weatherImage.src = images.clearDay;
+    }
 }
 
 function minMaxTemp(data) {
@@ -179,7 +227,3 @@ function pressureDetails(data) {
     pressureValueDescription.textContent = pressureValueWarning;
 }
 
-
-                                               
-
-       
