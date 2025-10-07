@@ -16,6 +16,9 @@ let airQualityValue = document.querySelector('#airQualityValue');
 let airQualityIndex = document.querySelector('#airQualityIndex');
 let climate = document.querySelector('#climate');
 let weatherImage = document.querySelector('#mainWeatherImage');
+let uvIndex = document.querySelector('#uvIndexOut');
+let uvIndexWarning = document.querySelector('#uvIndexWarning');
+
 let images = {
     lightRainDay: "images/lightrain(day).png",
     lightRainNight: "images/lightrainNight.png",
@@ -33,7 +36,7 @@ let images = {
 
 searchIcon.addEventListener('click', () => {
     city = search.value;
-    if (city === '') {
+    if (!city) {
         window.alert("please enter a city");
     }else {
         async function getWeatherDetails() {
@@ -42,6 +45,8 @@ searchIcon.addEventListener('click', () => {
             const weatherApi = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
             const weatherDetails = await fetch(weatherApi);
             const data = await weatherDetails.json();
+            const latitude = data.coord.lat;
+            const longitude = data.coord.lon;
             mainTemp(data);
             getCityName(data);
             getClimate(data);
@@ -51,8 +56,10 @@ searchIcon.addEventListener('click', () => {
             getWindSpeed(data);
             sunriseConvert(data);
             sunsetConvert(data);
-            pressureDetails(data);   
-            console.log(data);
+            pressureDetails(data);
+            getUvIndex(latitude, longitude);
+
+            // console.log(data);
         }
         catch(error) {
             console.log("error! cannot fetch data");
@@ -60,10 +67,11 @@ searchIcon.addEventListener('click', () => {
         
 }
         async function getAirQuality() {
+            const airApi = "kktnmB0/suy2hXK/xLL1kw==mNRG44pm82wOqnPs";
             try {
                 const airQuality = await fetch(`https://api.api-ninjas.com/v1/airquality?city=${city}`, {
                 headers: {
-                    "X-Api-key": "kktnmB0/suy2hXK/xLL1kw==mNRG44pm82wOqnPs"
+                    "X-Api-key": airApi
                 }
             })
                 const data = await airQuality.json();
@@ -73,22 +81,27 @@ searchIcon.addEventListener('click', () => {
                 switch(true) {
                     case airQualValue > 400:
                         airQualityResult = "Severe";
+                        airQualityIndex.style.color = "#640101"
                         break;
                     case airQualValue >= 300:
                         airQualityResult = "Very Poor";
-
+                        airQualityIndex.style.color = "#8b0000"
                         break;
                     case airQualValue >= 200:
                         airQualityResult = "Poor";
+                        airQualityIndex.style.color = "red";
                         break;
                     case airQualValue >= 100:
                         airQualityResult = "Moderate";
+                        airQualityIndex.style.color = "#F5CD2F"
                         break;
                     case airQualValue >= 50:
                         airQualityResult = "Satisfactory";
+                        airQualityIndex.style.color = "#a58503ff"
                         break;
                     default:
                         airQualityResult = "Good"
+                        airQualityIndex.style.color = "#009968"
                 }
                 airQualityIndex.textContent = airQualityResult;
             } catch (error) {
@@ -225,5 +238,45 @@ function pressureDetails(data) {
             pressureValueWarning = "Extremely Low"
     }
     pressureValueDescription.textContent = pressureValueWarning;
+}
+
+
+  async function getUvIndex(lat, lon) {
+    const apiKey = "openuv-42pjhrmgg08dwe-io";
+    try{
+        const uvResponse = await fetch(`https://api.openuv.io/api/v1/uv?lat=${lat}&lng=${lon}`, {
+            headers: {
+                "x-access-token": apiKey
+            }
+        });
+        const uvData = await uvResponse.json();
+        const uvValue = Math.floor(uvData.result.uv);
+        uvIndex.textContent = uvValue;
+        let uvIndexWarningValue;
+        switch(true) {
+            case uvValue >= 11:
+                uvIndexWarningValue = "Extreme";
+                uvIndexWarning.style.color = "#7f02b4";
+                break;
+            case uvValue >= 8:
+                uvIndexWarningValue = "Very High";
+                uvIndexWarning.style.color = "#ff0037";
+                break;
+            case uvValue >= 6:
+                uvIndexWarningValue = "High";
+                uvIndexWarning.style.color = "#ff9100";
+                break;
+            case uvValue >= 3:
+                uvIndexWarningValue = "Moderate";
+                uvIndexWarning.style.color = "#F5CD2F"
+                break;
+            default:
+                uvIndexWarningValue = "Low";
+                uvIndexWarning.style.color = "#1eff00ff"
+        }
+        uvIndexWarning.textContent = uvIndexWarningValue;
+    }catch(error) {
+        console.log(error);
+    }
 }
 

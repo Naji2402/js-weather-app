@@ -40,7 +40,7 @@ body{
     border-radius: 25px;
     border: none;
     background: #C2D4D3;;
-    padding: 10px 80px;
+    padding:10px 60px 10px 20px;
     color: rgba(126, 124, 124, 1);
     font-weight: 400;
     font-size: 16px;
@@ -54,7 +54,7 @@ body{
     gap: 25px;
     align-items: center;
     top: 18px;
-    left: 50px;
+    right: 37px;
 }
 .search-contents img{
     height: 20px;
@@ -361,4 +361,16 @@ body{
     line-height: 36px;
     font-family: "Plus Jakarta Sans";
     color: #FFFFFF;
+
+}
+
+
+
+@media screen and (max-width:500px){
+    .right-section{
+        display: none;
+    }
+    .weather-app-main{
+        background-color: transparent;
+    }
 }
