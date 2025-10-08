@@ -18,6 +18,8 @@ let climate = document.querySelector('#climate');
 let weatherImage = document.querySelector('#mainWeatherImage');
 let uvIndex = document.querySelector('#uvIndexOut');
 let uvIndexWarning = document.querySelector('#uvIndexWarning');
+let forecastDay = document.querySelector('#forecastDay');
+let forecastTemp = document.querySelector('#forecastTemp');
 
 let images = {
     lightRainDay: "images/lightrain(day).png",
@@ -58,57 +60,12 @@ searchIcon.addEventListener('click', () => {
             sunsetConvert(data);
             pressureDetails(data);
             getUvIndex(latitude, longitude);
-
-            // console.log(data);
+            getForecastDetails(latitude, longitude);
         }
         catch(error) {
-            console.log("error! cannot fetch data");
-        }
-        
+            console.log(error);
+        }   
 }
-        async function getAirQuality() {
-            const airApi = "kktnmB0/suy2hXK/xLL1kw==mNRG44pm82wOqnPs";
-            try {
-                const airQuality = await fetch(`https://api.api-ninjas.com/v1/airquality?city=${city}`, {
-                headers: {
-                    "X-Api-key": airApi
-                }
-            })
-                const data = await airQuality.json();
-                const airQualValue = data.overall_aqi;
-                airQualityValue.textContent = airQualValue;
-                let airQualityResult;
-                switch(true) {
-                    case airQualValue > 400:
-                        airQualityResult = "Severe";
-                        airQualityIndex.style.color = "#640101"
-                        break;
-                    case airQualValue >= 300:
-                        airQualityResult = "Very Poor";
-                        airQualityIndex.style.color = "#8b0000"
-                        break;
-                    case airQualValue >= 200:
-                        airQualityResult = "Poor";
-                        airQualityIndex.style.color = "red";
-                        break;
-                    case airQualValue >= 100:
-                        airQualityResult = "Moderate";
-                        airQualityIndex.style.color = "#F5CD2F"
-                        break;
-                    case airQualValue >= 50:
-                        airQualityResult = "Satisfactory";
-                        airQualityIndex.style.color = "#a58503ff"
-                        break;
-                    default:
-                        airQualityResult = "Good"
-                        airQualityIndex.style.color = "#009968"
-                }
-                airQualityIndex.textContent = airQualityResult;
-            } catch (error) {
-                console.log(error);
-            }
-            
-        }
 getAirQuality()
 getWeatherDetails();
 }
@@ -241,42 +198,106 @@ function pressureDetails(data) {
 }
 
 
-  async function getUvIndex(lat, lon) {
-    const apiKey = "openuv-42pjhrmgg08dwe-io";
-    try{
-        const uvResponse = await fetch(`https://api.openuv.io/api/v1/uv?lat=${lat}&lng=${lon}`, {
-            headers: {
-                "x-access-token": apiKey
-            }
-        });
-        const uvData = await uvResponse.json();
-        const uvValue = Math.floor(uvData.result.uv);
-        uvIndex.textContent = uvValue;
-        let uvIndexWarningValue;
+async function getAirQuality() {
+    const airApi = "kktnmB0/suy2hXK/xLL1kw==mNRG44pm82wOqnPs";
+    try {
+        const airQuality = await fetch(`https://api.api-ninjas.com/v1/airquality?city=${city}`, {
+        headers: {
+            "X-Api-key": airApi
+        }
+    })
+        const data = await airQuality.json();
+        const airQualValue = data.overall_aqi;
+        airQualityValue.textContent = airQualValue;
+        let airQualityResult;
         switch(true) {
-            case uvValue >= 11:
-                uvIndexWarningValue = "Extreme";
-                uvIndexWarning.style.color = "#7f02b4";
+            case airQualValue > 400:
+                airQualityResult = "Severe";
+                airQualityIndex.style.color = "#640101"
                 break;
-            case uvValue >= 8:
-                uvIndexWarningValue = "Very High";
-                uvIndexWarning.style.color = "#ff0037";
+            case airQualValue >= 300:
+                airQualityResult = "Very Poor";
+                airQualityIndex.style.color = "#8b0000"
                 break;
-            case uvValue >= 6:
-                uvIndexWarningValue = "High";
-                uvIndexWarning.style.color = "#ff9100";
+            case airQualValue >= 200:
+                airQualityResult = "Poor";
+                airQualityIndex.style.color = "red";
                 break;
-            case uvValue >= 3:
-                uvIndexWarningValue = "Moderate";
-                uvIndexWarning.style.color = "#F5CD2F"
+            case airQualValue >= 100:
+                airQualityResult = "Moderate";
+                airQualityIndex.style.color = "#F5CD2F"
+                break;
+            case airQualValue >= 50:
+                airQualityResult = "Satisfactory";
+                airQualityIndex.style.color = "#a58503ff"
                 break;
             default:
-                uvIndexWarningValue = "Low";
-                uvIndexWarning.style.color = "#1eff00ff"
+                airQualityResult = "Good"
+                airQualityIndex.style.color = "#009968"
         }
-        uvIndexWarning.textContent = uvIndexWarningValue;
+        airQualityIndex.textContent = airQualityResult;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getForecastDetails(lati, longi) {
+    try{
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lati}&longitude=${longi}&daily=temperature_2m_max&timezone=auto`);
+        const data = await response.json();
+        console.log(data);
+        const dateArray = [];
+        const tempArray = [];
+        data.daily.time.forEach((day, index) => {
+            let date = new Date(day).toLocaleDateString("en-US", {weekday: "short"});
+            dateArray[index] = date;
+        });
+        data.daily.temperature_2m_max.forEach((temp, index) => {
+            tempArray[index] = temp
+        });
+        let combined = dateArray.map((dayy, index) => ({
+            day: dayy,
+            maxTemperature: tempArray[index]
+        }));
+        console.log(combined);
     }catch(error) {
         console.log(error);
     }
 }
 
+
+async function getUvIndex(lati, longi) {
+    try{
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lati}&longitude=${longi}&daily=uv_index_max&timezone=auto&forecast_days=1`);
+        const data = await response.json();
+        console.log(data);
+        let uvIndexValue = Math.floor(data.daily.uv_index_max[0]);
+        uvIndex.textContent = uvIndexValue;
+        console.log(uvIndex);
+        let uvIndexWarningValue;
+            switch(true) {
+                case uvIndexValue >= 11:
+                    uvIndexWarningValue = "Extreme";
+                    uvIndexWarning.style.color = "#7f02b4";
+                    break;
+                case uvIndexValue >= 8:
+                    uvIndexWarningValue = "Very High";
+                    uvIndexWarning.style.color = "#ff0037";
+                    break;
+                case uvIndexValue >= 6:
+                    uvIndexWarningValue = "High";
+                    uvIndexWarning.style.color = "#ff9100";
+                    break;
+                case uvIndexValue >= 3:
+                    uvIndexWarningValue = "Moderate";
+                    uvIndexWarning.style.color = "#F5CD2F"
+                    break;
+                default:
+                    uvIndexWarningValue = "Low";
+                    uvIndexWarning.style.color = "#1eff00ff"
+            }
+            uvIndexWarning.textContent = uvIndexWarningValue;
+    }catch(error) {
+        console.log(error);
+    }
+}
