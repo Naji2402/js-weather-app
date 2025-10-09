@@ -20,6 +20,7 @@ let uvIndex = document.querySelector('#uvIndexOut');
 let uvIndexWarning = document.querySelector('#uvIndexWarning');
 let forecastDay = document.querySelector('#forecastDay');
 let forecastTemp = document.querySelector('#forecastTemp');
+let forecastMain = document.querySelector('#climateCards');
 
 let images = {
     lightRainDay: "images/lightrain(day).png",
@@ -34,6 +35,60 @@ let images = {
     windyCloud: "images/windycloud.png"
 }
 
+function getCurrentUserLocationDetails() {
+    navigator.geolocation.getCurrentPosition(success);
+    async function success(position) {
+        try{
+            const lat = position.coords.latitude;
+            const long = position.coords.longitude;
+            const apiKey = "7b8091521c7fac9f9a44226bcfcefc9b";
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${apiKey}`);
+            const data = await response.json();
+            console.log(data);
+            const currentUserCity = data.name;
+            cityName.textContent = currentUserCity;
+            getCurrentLocTemp(data)
+            getCurrLocMinMaxTemp(data)
+            getCurrentLocHumidity(data)
+            getCurrentLocWind(data);
+        }catch(error) {
+            console.log(error);
+        }
+    }
+}
+getCurrentUserLocationDetails()
+
+function getCurrentLocTemp(data) {
+    const currentLocTemp = data.main.temp;
+    const celciusConvert = currentLocTemp - 273.15;
+    const celciusResult = `${Math.floor(celciusConvert)}°c`
+    mainTemperature.textContent = celciusResult;
+}
+
+async function getCurrLocMinMaxTemp(data) {
+    const latitude = data.coord.lat;
+    const longitude = data.coord.lon;
+    try{
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_min,temperature_2m_max&hourly=temperature_2m&forecast_days=1`);
+        const data = await response.json();
+        const maxTemperature = data.daily.temperature_2m_max;
+        const minTemperature = data.daily.temperature_2m_min;
+        minimumTemperature.textContent = `Min Temperature-${Math.floor(minTemperature)}°C`;
+        maximumTemperature.textContent = `Max Temperature-${Math.floor(maxTemperature)}°C`;
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+function getCurrentLocHumidity(data) {
+    const humidityValue = data.main.humidity;
+    humidity.textContent = `${humidityValue}%`;
+}
+function getCurrentLocWind(data) {
+    const windSpeedValue = data.wind.speed;
+    windSpeed.textContent = `${windSpeedValue.toFixed(1)}km/h`;
+
+}
 
 
 searchIcon.addEventListener('click', () => {
@@ -53,7 +108,7 @@ searchIcon.addEventListener('click', () => {
             getCityName(data);
             getClimate(data);
             getCurrentDay();
-            minMaxTemp(data);
+            minMaxTemp(latitude, longitude);
             getHumidity(data);
             getWindSpeed(data);
             sunriseConvert(data);
@@ -108,18 +163,21 @@ function getClimate(data) {
         case "heavy intensity rain":
             weatherImage.src = images.thunderStorm;
             break;
+        case "few clouds":
+            weatherImage.src = images.cloudy;
+            break;
         default:
             weatherImage.src = images.clearDay;
     }
 }
 
-function minMaxTemp(data) {
-    const minTemperatureValue = data.main.temp_min;
-    const maxTemperatureValue = data.main.temp_max;
-    const minTemperature = minTemperatureValue - 273.15;
-    const maxTemperature = maxTemperatureValue - 273.15;
-    minimumTemperature.textContent = `Min Temperature-${minTemperature.toFixed(0)}°C`;
-    maximumTemperature.textContent = `Max Temperature-${maxTemperature.toFixed(0)}°C`;
+async function minMaxTemp(latitude, longitude) {
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_min,temperature_2m_max&hourly=temperature_2m&forecast_days=1`);
+        const data = await response.json();
+        const maxTemperature = data.daily.temperature_2m_max;
+        const minTemperature = data.daily.temperature_2m_min;
+        minimumTemperature.textContent = `Min Temperature-${Math.floor(minTemperature)}°C`;
+        maximumTemperature.textContent = `Max Temperature-${Math.floor(maxTemperature)}°C`;
 }
 
 function getHumidity(data) {
@@ -144,7 +202,6 @@ function sunRiseSetConvert(sunSetTime) {
     const minutes = date.getMinutes();
     return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")} ${amPm}`;
 }
-
 
 function sunriseConvert(data) {
     const sunRiseTime = data.sys.sunrise;
@@ -233,7 +290,7 @@ async function getAirQuality() {
                 break;
             default:
                 airQualityResult = "Good"
-                airQualityIndex.style.color = "#009968"
+                airQualityIndex.style.color = "#1eff00ff"
         }
         airQualityIndex.textContent = airQualityResult;
     } catch (error) {
@@ -243,23 +300,28 @@ async function getAirQuality() {
 
 async function getForecastDetails(lati, longi) {
     try{
-        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lati}&longitude=${longi}&daily=temperature_2m_max&timezone=auto`);
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lati}&longitude=${longi}&daily=temperature_2m_mean&timezone=auto&forecast_days=7`);
         const data = await response.json();
-        console.log(data);
         const dateArray = [];
         const tempArray = [];
         data.daily.time.forEach((day, index) => {
             let date = new Date(day).toLocaleDateString("en-US", {weekday: "short"});
             dateArray[index] = date;
         });
-        data.daily.temperature_2m_max.forEach((temp, index) => {
+        data.daily.temperature_2m_mean.forEach((temp, index) => {
             tempArray[index] = temp
         });
         let combined = dateArray.map((dayy, index) => ({
             day: dayy,
             maxTemperature: tempArray[index]
         }));
-        console.log(combined);
+        combined.forEach((forecast) => {
+            forecastMain.innerHTML += `<div class="climate-card">
+                                        <span id="forecastDay">${forecast.day}</span>
+                                        <img src="images/daily-climate1.png" alt="">
+                                        <span id="forecastTemp">${Math.floor(forecast.maxTemperature)}°c</span>
+                                  </div>`
+        });
     }catch(error) {
         console.log(error);
     }
@@ -270,10 +332,8 @@ async function getUvIndex(lati, longi) {
     try{
         const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lati}&longitude=${longi}&daily=uv_index_max&timezone=auto&forecast_days=1`);
         const data = await response.json();
-        console.log(data);
         let uvIndexValue = Math.floor(data.daily.uv_index_max[0]);
         uvIndex.textContent = uvIndexValue;
-        console.log(uvIndex);
         let uvIndexWarningValue;
             switch(true) {
                 case uvIndexValue >= 11:
