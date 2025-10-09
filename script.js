@@ -51,6 +51,10 @@ function getCurrentUserLocationDetails() {
             getCurrLocMinMaxTemp(data)
             getCurrentLocHumidity(data)
             getCurrentLocWind(data);
+            getCurrLocRainDetails(data);
+            currentLocSunriseConvert(data);
+            currentLocSunsetConvert(data);
+            getCurrLocForecastDetails(lat, long)
         }catch(error) {
             console.log(error);
         }
@@ -89,6 +93,93 @@ function getCurrentLocWind(data) {
     windSpeed.textContent = `${windSpeedValue.toFixed(1)}km/h`;
 
 }
+function getCurrLocRainDetails(data) {
+    const rainDetails = data.weather[0].description;
+     climate.textContent = rainDetails;
+    switch(rainDetails){
+        case "scattered clouds":
+            weatherImage.src = images.cloudy;
+            break;
+        case "overcast clouds":
+            weatherImage.src = images.windyCloud;
+            break;
+        case "light rain":
+            weatherImage.src = images.lightRainDay;
+            break;
+        case "heavy rain":
+            weatherImage.src = images.thunderStorm;
+            break;
+        case "moderate rain": 
+            weatherImage.src = images.heavyRain;
+            break;
+        case "broken clouds":
+            weatherImage.src = images.cloudy;
+            break;
+        case "heavy intensity rain":
+            weatherImage.src = images.thunderStorm;
+            break;
+        case "few clouds":
+            weatherImage.src = images.cloudy;
+            break;
+        default:
+            weatherImage.src = images.clearDay;
+    }
+}
+
+function currentLocSunRiseSetConvert(sunSetTime) {
+    const date = new Date(sunSetTime * 1000);
+    const hours = date.getHours();
+    let amPm;
+    if (hours >= 12) {
+        amPm = "PM"
+    }else{
+        amPm = "AM"
+    }
+    const minutes = date.getMinutes();
+    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")} ${amPm}`;
+}
+
+function currentLocSunriseConvert(data) {
+    const sunRiseTime = data.sys.sunrise;
+    let sunRiseDetails = sunRiseSetConvert(sunRiseTime);
+    sunRise.textContent = sunRiseDetails;
+}
+
+function currentLocSunsetConvert(data) {
+    const sunSetTime = data.sys.sunset;
+    let sunSetDetails = sunRiseSetConvert(sunSetTime);
+    sunSet.textContent = sunSetDetails;
+}
+
+async function getCurrLocForecastDetails(lati, longi) {
+    try{
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lati}&longitude=${longi}&daily=temperature_2m_mean&timezone=auto&forecast_days=7`);
+        const data = await response.json();
+        const dateArray = [];
+        const tempArray = [];
+        data.daily.time.forEach((day, index) => {
+            let date = new Date(day).toLocaleDateString("en-US", {weekday: "short"});
+            dateArray[index] = date;
+        });
+        data.daily.temperature_2m_mean.forEach((temp, index) => {
+            tempArray[index] = temp
+        });
+        let combined = dateArray.map((dayy, index) => ({
+            day: dayy,
+            maxTemperature: tempArray[index]
+        }));
+        combined.forEach((forecast) => {
+            forecastMain.innerHTML += `<div class="climate-card">
+                                        <span id="forecastDay">${forecast.day}</span>
+                                        <img src="images/daily-climate1.png" alt="">
+                                        <span id="forecastTemp">${Math.floor(forecast.maxTemperature)}°c</span>
+                                  </div>`
+        });
+    }catch(error) {
+        console.log(error);
+    }
+}
+
 
 
 searchIcon.addEventListener('click', () => {
@@ -315,6 +406,7 @@ async function getForecastDetails(lati, longi) {
             day: dayy,
             maxTemperature: tempArray[index]
         }));
+        forecastMain.innerHTML = "";
         combined.forEach((forecast) => {
             forecastMain.innerHTML += `<div class="climate-card">
                                         <span id="forecastDay">${forecast.day}</span>
@@ -361,3 +453,6 @@ async function getUvIndex(lati, longi) {
         console.log(error);
     }
 }
+
+
+
